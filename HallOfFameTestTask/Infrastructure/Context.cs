@@ -10,7 +10,16 @@ public class Context : DbContext
 
     public DbSet<Skill> Skills { get; set; }
 
-    public Context() => Database.EnsureCreated();
+    public Context()
+    {
+        //Database.EnsureDeleted();
+        Database.EnsureCreated();
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Person>().OwnsMany(p => p.Skills);
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

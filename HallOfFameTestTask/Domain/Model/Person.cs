@@ -8,6 +8,8 @@ public class Person
 
     public string DisplayName { get; set; }
 
+    public int? SkillsId { get; set; }
+
     public List<Skill> Skills { get; set; }
 
     public Person(long id, string name, string displayName, List<Skill> skills)
@@ -20,6 +22,6 @@ public class Person
 
     public Person()
     {
-
+        Skills = new List<Skill>();
     }
 }

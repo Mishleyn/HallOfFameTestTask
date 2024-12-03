@@ -1,11 +1,21 @@
+using HallOfFameTestTask.Application.Commands;
+using HallOfFameTestTask.Application.Repositories;
+using HallOfFameTestTask.Infrastructure;
+using HallOfFameTestTask.Infrastructure.Commands;
+using HallOfFameTestTask.Infrastructure.Repositories;
+using MediatR;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddMediatR(typeof(AddPersonCommand).Assembly, typeof(AddPersonHandler).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<Context>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 
 var app = builder.Build();
 

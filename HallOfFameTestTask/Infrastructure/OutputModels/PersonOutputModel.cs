@@ -1,10 +1,11 @@
 ﻿using HallOfFameTestTask.Infrastructure.InputModels;
-using MediatR;
 
-namespace HallOfFameTestTask.Application.Commands;
+namespace HallOfFameTestTask.Infrastructure.OutputModels;
 
-public class AddPersonCommand : IRequest<long>
+public class PersonOutputModel
 {
+    public long Id { get; set; }
+
     public string Name { get; set; }
 
     public string DisplayName { get; set; }

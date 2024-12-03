@@ -1,14 +1,17 @@
-﻿using HallOfFameTestTask.Domain.Model;
+﻿using HallOfFameTestTask.Infrastructure.InputModels;
+using MediatR;
 
 namespace HallOfFameTestTask.Application.Commands;
 
-public class UpdatePersonCommand
+public class UpdatePersonCommand : IRequest<long>
 {
     public long Id { get; set; }
 
-    public string Name { get; set; }
+    public UpdatePersonInputModel Model { get; set; }
 
-    public string DisplayName { get; set; }
-
-    public List<Skill> Skills { get; set; }
+    public UpdatePersonCommand(long id, UpdatePersonInputModel model)
+    {
+        Id = id;
+        Model = model;
+    }
 }

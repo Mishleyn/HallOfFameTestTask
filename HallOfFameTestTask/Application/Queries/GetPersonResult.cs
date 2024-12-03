@@ -2,7 +2,7 @@
 
 namespace HallOfFameTestTask.Application.Queries;
 
-public class GetAllPersonsResult
+public class GetPersonResult
 {
-    public List<PersonOutputModel> Persons { get; set; } = new();
+    public PersonOutputModel Person { get; set; }
 }
