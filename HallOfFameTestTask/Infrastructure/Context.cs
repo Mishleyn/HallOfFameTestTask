@@ -4,17 +4,20 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace HallOfFameTestTask.Infrastructure;
 
+/// <summary>
+/// Контекст базы данных
+/// </summary>
 public class Context : DbContext
 {
+    /// <summary>
+    /// Таблица, содержащая людей
+    /// </summary>
     public DbSet<Person> Persons { get; set; }
 
+    /// <summary>
+    /// Таблица, содержащая навыки
+    /// </summary>
     public DbSet<Skill> Skills { get; set; }
-
-    public Context()
-    {
-        //Database.EnsureDeleted();
-        Database.EnsureCreated();
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

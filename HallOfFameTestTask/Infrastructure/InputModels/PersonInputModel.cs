@@ -1,17 +1,10 @@
-﻿using HallOfFameTestTask.Infrastructure.InputModels;
-
-namespace HallOfFameTestTask.Infrastructure.OutputModels;
+﻿namespace HallOfFameTestTask.Infrastructure.InputModels;
 
 /// <summary>
-/// Выходная модель данных человека.
+/// Входная модель данных человека.
 /// </summary>
-public class PersonOutputModel
+public class PersonInputModel
 {
-    /// <summary>
-    /// Уникальный идентификатор.
-    /// </summary>
-    public long Id { get; set; }
-
     /// <summary>
     /// Имя.
     /// </summary>

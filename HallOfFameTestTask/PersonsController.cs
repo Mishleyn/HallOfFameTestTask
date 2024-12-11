@@ -1,7 +1,5 @@
-﻿using HallOfFameTestTask.Application.Commands;
-using HallOfFameTestTask.Application.Queries;
+﻿using HallOfFameTestTask.Application.Repositories;
 using HallOfFameTestTask.Infrastructure.InputModels;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HallOfFameTestTask;
@@ -10,26 +8,35 @@ namespace HallOfFameTestTask;
 [ApiController]
 public class PersonsController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    public readonly IPersonRepository _personRepository;
 
-    public PersonsController(IMediator mediator)
+    public PersonsController(IPersonRepository personRepository)
     {
-        _mediator = mediator;
+        _personRepository = personRepository;
     }
 
+    /// <summary>
+    /// Получает всех людей.
+    /// </summary>
+    /// <returns see cref="OkResult">Успешно получен список пользователей.</returns>
     [HttpGet()]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        var persons = await _mediator.Send(new GetAllPersonsQuery());
+        var persons = _personRepository.GetPersonsListAsync();
         return Ok(new { persons });
     }
 
+    /// <summary>
+    /// Получает человека.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    /// <returns see cref="BadRequestResult">Не существует человека с указанным Id.</returns>
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetPerson(long id)
+    public IActionResult Get(long id)
     {
         try
         {
-            var person = await _mediator.Send(new GetPersonQuery(id));
+            var person = _personRepository.GetPerson(id);
             return Ok(new { person });
         }
         catch(ArgumentNullException ex)
@@ -38,13 +45,18 @@ public class PersonsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Создает человека.
+    /// </summary>
+    /// <param name="model">Входная модель данных.</param>
+    /// <returns see cref="BadRequestResult">Некорректные входные данные.</returns>
     [HttpPost()]
-    public async Task<IActionResult> Post(AddPersonCommand command)
+    public async Task<IActionResult> PostAsync(PersonInputModel model)
     {
         try
         {
-            await _mediator.Send(command);
-            return Ok("Succesfull");
+            await _personRepository.CreateAsync(model);
+            return Ok();
         }
         catch(ArgumentException ex)
         {
@@ -52,14 +64,21 @@ public class PersonsController : ControllerBase
         }        
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> Update(long id, UpdatePersonInputModel model)
+    /// <summary>
+    /// Обновляет полностью данные человека.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    /// <param name="model">Входная модель обновленных данных.</param>
+    /// <returns see cref="OkResult">Успешное добавление.</returns>
+    /// <returns see cref="NotFoundResult">Человек с таким Id не найден.</returns>
+    /// <returns see cref="BadRequestResult">Некорректные входные данные.</returns>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAsync(long id, PersonInputModel model)
     {
         try
         {
-            UpdatePersonCommand command = new UpdatePersonCommand(id, model);
-            var person = await _mediator.Send(command);
-            return Ok("Succesfull");
+            await _personRepository.UpdateAsync(id, model);
+            return Ok();
         }
         catch (ArgumentNullException ex)
         {
@@ -71,14 +90,18 @@ public class PersonsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Удаляет пользователя.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    /// <returns see cref="NotFoundResult">Человек с таким Id не найден.</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(long id)
+    public async Task<IActionResult> DeleteAsync(long id)
     {
         try
         {
-            DeletePersonCommand command = new DeletePersonCommand(id);
-            await _mediator.Send(command);
-            return Ok("Succesfull");
+            await _personRepository.DeleteAsync(id);
+            return Ok();
         }
         catch (ArgumentNullException ex)
         {

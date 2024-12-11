@@ -1,18 +1,43 @@
-﻿using HallOfFameTestTask.Domain.Model;
+﻿using HallOfFameTestTask.Infrastructure.InputModels;
+using HallOfFameTestTask.Infrastructure.OutputModels;
 
 namespace HallOfFameTestTask.Application.Repositories;
 
+/// <summary>
+/// Содержит объявления методов для работы с человеком.
+/// </summary>
 public interface IPersonRepository
 {
-    Task<List<Person>> GetPersonsList();
+    /// <summary>
+    /// Получает список всех людей.
+    /// </summary>
+    /// <returns>Список людей.</returns>
+    Task<List<PersonOutputModel>> GetPersonsListAsync();
 
-    Person GetPerson(long id);
+    /// <summary>
+    /// Получает человека.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    /// <returns>Человек.</returns>
+    PersonOutputModel GetPerson(long id);
 
-    Task<long> Create(Person person);
+    /// <summary>
+    /// Создает человека.
+    /// </summary>
+    /// <param name="model">Входная модель.</param>
+    /// <returns>Уникальный идентификатор человека.</returns>
+    Task CreateAsync(PersonInputModel model);
 
-    Task Update(Person person);
+    /// <summary>
+    /// Обновляет данные человека полностью.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    /// <param name="model">Входная модель.</param>    
+    Task UpdateAsync(long id, PersonInputModel model);
 
-    Task Delete(Person person);
-
-    void Save();
+    /// <summary>
+    /// Удаляет человека.
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор.</param>
+    Task DeleteAsync(long id);
 }
